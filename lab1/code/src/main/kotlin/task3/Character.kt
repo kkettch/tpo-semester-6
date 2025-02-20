@@ -26,8 +26,16 @@ data class Character(
         lungs.inhale(smell)
     }
 
+    fun exhaleSmell() {
+        lungs.exhale()
+    }
+
     fun lightMatch(match: Match): Boolean {
         return match.turnOn()
+    }
+
+    fun putOutMatch(match: Match): Boolean {
+        return match.turnOff()
     }
 
     fun toggleSwitch(switch: Switch, match: Match): Boolean {

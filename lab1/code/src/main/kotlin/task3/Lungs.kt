@@ -12,7 +12,7 @@ class Lungs() {
         }
     }
 
-    fun clear() {
+    fun exhale() {
         absorbedSmells.clear()
     }
 }
