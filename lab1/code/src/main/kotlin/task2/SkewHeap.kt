@@ -5,7 +5,7 @@ class SkewHeap<T : Comparable<T>> {
 
     private class Node<T>(val value: T, var left: Node<T>? = null, var right: Node<T>? = null) {
         override fun toString(): String {
-            return "($value, L=${left?.toString() ?: "null"}, R=${right?.toString() ?: "null"})"
+            return "($value, L=${left.toString()}, R=${right.toString()})"
         }
     }
 
@@ -47,7 +47,7 @@ class SkewHeap<T : Comparable<T>> {
     }
 
     override fun toString(): String {
-        return root?.toString() ?: "null"
+        return root.toString()
     }
 }
 
