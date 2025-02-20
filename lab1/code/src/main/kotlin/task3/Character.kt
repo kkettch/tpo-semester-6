@@ -1,0 +1,36 @@
+package task3
+
+import task3.enums.CharacterState
+
+data class Character(
+    val name: String,
+    var state: CharacterState = CharacterState.NOT_IDENTIFIED,
+    var isStanding: Boolean = false,
+) {
+    private val lungs = Lungs()
+
+    fun standUp() {
+        isStanding = true
+        changeState(CharacterState.VISIBLE)
+    }
+
+    fun sitDown() {
+        isStanding = false
+    }
+
+    fun changeState(newState: CharacterState) {
+        state = newState
+    }
+
+    fun inhaleSmell(smell: String) {
+        lungs.inhale(smell)
+    }
+
+    fun lightMatch(match: Match): Boolean {
+        return match.turnOn()
+    }
+
+    fun toggleSwitch(switch: Switch, match: Match): Boolean {
+        return switch.toggle(match)
+    }
+}
