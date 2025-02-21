@@ -4,10 +4,10 @@ import task3.enums.CharacterState
 
 data class Character(
     val name: String,
+    val lungs: Lungs,
     var state: CharacterState = CharacterState.NOT_IDENTIFIED,
-    var isStanding: Boolean = false,
+    var isStanding: Boolean = false
 ) {
-    private val lungs = Lungs()
 
     fun standUp() {
         isStanding = true

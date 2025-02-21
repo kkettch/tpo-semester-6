@@ -9,6 +9,10 @@ class SeriesExpansion {
         var i = x
         var result = x
 
+        if (x.isNaN() || x.isInfinite()) {
+            throw InvalidInputException("Invalid input: x must be a finite number")
+        }
+
         if (abs(x) >= 1) {
             throw InvalidInputException("x is out of range, correct range: (-1; 1)")
         }

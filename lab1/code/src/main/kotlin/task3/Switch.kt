@@ -3,7 +3,6 @@ package task3
 import task3.enums.LightState
 import task3.exceptions.BulbIsNotConnectedException
 import task3.exceptions.MatchNotLitException
-import task3.exceptions.PathBlockedException
 
 class Switch {
     private var bulb: Bulb? = null

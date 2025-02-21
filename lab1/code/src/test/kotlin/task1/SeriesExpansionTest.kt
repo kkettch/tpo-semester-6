@@ -27,4 +27,13 @@ class SeriesExpansionTest {
             SeriesExpansion().arctgCalculation(x)
         }
     }
+
+    @ParameterizedTest
+    @DisplayName("Testing invalid input (NaN, Infinity)")
+    @ValueSource(floats = [Float.NaN, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY])
+    fun `Function arctgCalculation() should throw an error for invalid input`(x: Float) {
+        assertThrows<InvalidInputException> {
+            SeriesExpansion().arctgCalculation(x)
+        }
+    }
  }

@@ -2,7 +2,7 @@ package task3
 
 import task3.exceptions.ImpossibleToInhaleException
 
-class Lungs() {
+class Lungs {
     private val absorbedSmells = mutableListOf<String>()
 
     fun inhale(smell: String) {
@@ -15,4 +15,6 @@ class Lungs() {
     fun exhale() {
         absorbedSmells.clear()
     }
+
+    fun getAbsorbedSmells(): List<String> = absorbedSmells.toList()
 }
