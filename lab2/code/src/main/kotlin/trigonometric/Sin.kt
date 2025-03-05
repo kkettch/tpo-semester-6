@@ -12,18 +12,16 @@ class Sin: TrigonometricFunction() {
             else it
         }
         var sum = normX
-        var prev: Double
         var term = normX
-        var step = 1
+        var step = 0
         var maxSteps = 10
 
-        do {
-            prev = sum
-            term *= -normX * normX / ((2 * step) * (2 * step + 1))
+        while (maxSteps > 0) {
+            term *= -normX * normX / ((2 * step + 2) * (2 * step + 3))
             sum += term
             step++
-            if (abs(sum - prev) < epsilon) { maxSteps-- }
-        } while (maxSteps > 0)
+            if (abs(term) < epsilon) { maxSteps-- }
+        }
 
         return sum
     }
