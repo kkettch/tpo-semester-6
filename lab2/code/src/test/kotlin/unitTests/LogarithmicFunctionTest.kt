@@ -1,4 +1,4 @@
-package logarithmic
+package unitTests
 
 
 import org.example.logarithmic.*
@@ -10,8 +10,31 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.math.abs
 import kotlin.math.ln
+import kotlin.math.log
 
 class LogarithmicFunctionTest {
+
+    @ParameterizedTest
+    @DisplayName("Testing invalid input for lоgBase(x)")
+    @ValueSource(doubles = [-5.0, 0.0, 1.0])
+    fun `Should not calculate logBase(x)`(base: Double) {
+        val epsilon = 0.001
+        val x = 3.0
+        assertThrows<IllegalArgumentException> {
+            LogBase(Ln(), base).calculate(x, epsilon)
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Testing lоgBase(x)")
+    @ValueSource(doubles = [1.0, 3.0, 10.0])
+    fun `Should calculate logBase(x)`(x: Double) {
+        val epsilon = 0.001
+        val base = 3.0
+        val expected = log(x, base)
+        val actual = LogBase(Ln(), base).calculate(x, epsilon)
+        assertTrue(abs(expected - actual) < epsilon, "Expected: $expected, actual: $actual")
+    }
 
     @ParameterizedTest
     @DisplayName("Testing ln(x)")

@@ -1,4 +1,4 @@
-package trigonometric
+package unitTests
 
 import org.example.trigonometric.*
 

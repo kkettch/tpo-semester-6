@@ -9,10 +9,8 @@ abstract class TrigonometricFunction: Function {
         return compute(x, epsilon)
     }
 
-    // protected abstract - должен быть переопределен в подклассах (обязательно), доступен только внутри этого класса и его наследников
     protected abstract fun compute(x: Double, epsilon: Double): Double
 
-    // protected open - наследники могут переопределить (не must have)
     protected open fun validateInput(x: Double, epsilon: Double) {
         if (x.isNaN() || x.isInfinite()) {
             throw IllegalArgumentException("Illegal Argument x: $x")
