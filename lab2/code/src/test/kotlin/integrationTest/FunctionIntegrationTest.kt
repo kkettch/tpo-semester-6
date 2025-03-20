@@ -92,7 +92,7 @@ class FunctionIntegrationTest {
 
         // real
         val cosReal = Cos(sinMock)
-        val cotReal = Cot(sinMock, cosReal)
+        val cotReal = Cot(sinMock)
         val secReal = Sec(cosReal)
         val cscReal = Csc(sinMock)
 
@@ -118,10 +118,10 @@ class FunctionIntegrationTest {
     fun `test trigonometric with all real functions`(x: Double, expected: Double) {
         // real
         val sinReal = Sin()
-        val cosReal = Cos(sinReal)
-        val cotReal = Cot(sinReal, cosReal)
-        val secReal = Sec(cosReal)
-        val cscReal = Csc(sinReal)
+        val cosReal = Cos()
+        val cotReal = Cot()
+        val secReal = Sec()
+        val cscReal = Csc()
 
         val systemFunction = SystemFunction(
             sin = sinReal,
@@ -231,10 +231,10 @@ class FunctionIntegrationTest {
     @CsvFileSource(resources = ["/CsvFiles/testDataLogarithmic.csv"], numLinesToSkip = 1)
     fun `test logarithmic with all real`(x: Double, expected: Double) {
         // real
-        val lnReal: Ln = Ln()
-        val log2Real = LogBase(lnReal, 2.0)
-        val log3Real = LogBase(lnReal, 3.0)
-        val log5Real = LogBase(lnReal, 5.0)
+        val lnReal = Ln()
+        val log2Real = LogBase(base = 2.0)
+        val log3Real = LogBase(base = 3.0)
+        val log5Real = LogBase(base = 5.0)
 
         val systemFunction = SystemFunction(
             ln = lnReal,

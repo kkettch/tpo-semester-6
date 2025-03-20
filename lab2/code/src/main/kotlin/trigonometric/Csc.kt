@@ -2,7 +2,9 @@ package org.example.trigonometric
 
 import kotlin.math.PI
 
-class Csc(private val sin: Sin): TrigonometricFunction() {
+class Csc(
+    private val sin: Sin = Sin()
+): TrigonometricFunction() {
     override fun compute(x: Double, epsilon: Double): Double {
         return 1 / sin.calculate(x, epsilon)
     }

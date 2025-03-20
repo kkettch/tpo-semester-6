@@ -1,6 +1,9 @@
 package org.example.logarithmic
 
-class LogBase(private val ln: Ln, private val base: Double): LogarithmicFunction() {
+class LogBase(
+    private val ln: Ln = Ln(),
+    private val base: Double
+): LogarithmicFunction() {
     override fun compute(x: Double, epsilon: Double): Double {
         return ln.calculate(x, epsilon) / ln.calculate(base, epsilon)
     }

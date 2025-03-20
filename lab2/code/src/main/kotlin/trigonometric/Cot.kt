@@ -3,8 +3,8 @@ package org.example.trigonometric
 import kotlin.math.PI
 
 class Cot(
-    private val sin: Sin,
-    private val cos: Cos
+    private val sin: Sin = Sin(),
+    private val cos: Cos = Cos(sin)
 ): TrigonometricFunction() {
     override fun compute(x: Double, epsilon: Double): Double {
         return cos.calculate(x, epsilon) / sin.calculate(x, epsilon)
