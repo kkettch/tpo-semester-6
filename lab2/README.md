@@ -38,5 +38,6 @@ x > 0 : (((((log_5(x) + log_3(x)) + log_2(x)) - ln(x)) * ln(x)) / ((log_5(x) * l
 
 2. Cos()
    
-<img width="500" alt="Снимок экрана 2025-03-20 в 21 10 22" src="https://github.com/user-attachments/assets/f0cbddf9-ef0b-4e5d-9580-a99012f2445d" />
+<img width="500" alt="Снимок экрана 2025-03-20 в 21 13 06" src="https://github.com/user-attachments/assets/ac507493-bd9c-49c8-b51a-6fa28fe48d53" />
+
 
