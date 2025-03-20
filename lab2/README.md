@@ -34,9 +34,9 @@ x > 0 : (((((log_5(x) + log_3(x)) + log_2(x)) - ln(x)) * ln(x)) / ((log_5(x) * l
 
 1. Sin()
 
-<img width="794" alt="Снимок экрана 2025-03-20 в 21 09 54" src="https://github.com/user-attachments/assets/548d6693-a6d3-43ea-95c7-074a8665a20f" />
+<img width="500" alt="Снимок экрана 2025-03-20 в 21 09 54" src="https://github.com/user-attachments/assets/548d6693-a6d3-43ea-95c7-074a8665a20f" />
 
 2. Cos()
    
-<img width="797" alt="Снимок экрана 2025-03-20 в 21 10 22" src="https://github.com/user-attachments/assets/f0cbddf9-ef0b-4e5d-9580-a99012f2445d" />
+<img width="500" alt="Снимок экрана 2025-03-20 в 21 10 22" src="https://github.com/user-attachments/assets/f0cbddf9-ef0b-4e5d-9580-a99012f2445d" />
 
