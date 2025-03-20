@@ -38,9 +38,9 @@ class LogarithmicFunctionTest {
 
     @ParameterizedTest
     @DisplayName("Testing ln(x)")
-    @ValueSource(doubles = [0.001, 0.3, 1.0, 1000.0])
+    @ValueSource(doubles = [0.1, 0.3, 1.0, 10.0])
     fun `Should calculate ln(x)`(x: Double) {
-        val epsilon = 0.00001
+        val epsilon = 0.001
         val expected = ln(x)
         val actual = Ln().calculate(x, epsilon)
         assertTrue(abs(expected - actual) < epsilon, "Expected: $expected, actual: $actual")

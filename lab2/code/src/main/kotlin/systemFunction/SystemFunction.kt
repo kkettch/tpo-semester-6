@@ -5,17 +5,18 @@ import org.example.trigonometric.*
 import kotlin.math.PI
 import kotlin.math.pow
 
-class SystemFunction: Function {
-    private val ln = Ln()
-    private val log2 = LogBase(ln, 2.0)
-    private val log3 = LogBase(ln, 3.0)
-    private val log5 = LogBase(ln, 5.0)
+class SystemFunction(
+    private val ln: Ln = Ln(),
+    private val log2: LogBase = LogBase(ln, 2.0),
+    private val log3: LogBase = LogBase(ln, 3.0),
+    private val log5: LogBase = LogBase(ln, 5.0),
 
-    private val sin = Sin()
-    private val cos = Cos(sin)
-    private val cot = Cot(sin, cos)
-    private val sec = Sec(cos)
-    private val csc = Csc(sin)
+    private val sin: Sin = Sin(),
+    private val cos: Cos = Cos(sin),
+    private val cot: Cot = Cot(sin, cos),
+    private val sec: Sec = Sec(cos),
+    private val csc: Csc = Csc(sin)
+) : Function {
 
     override fun calculate(x: Double, epsilon: Double): Double {
         return if (x <= 0) {

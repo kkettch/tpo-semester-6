@@ -7,7 +7,6 @@ import kotlin.math.pow
 class Ln : LogarithmicFunction() {
 
     override fun compute(x: Double, epsilon: Double): Double {
-
         val newEpsilon = epsilon * 0.01
         var sum = 0.0
         var prev: Double
@@ -33,5 +32,33 @@ class Ln : LogarithmicFunction() {
         }
 
         return sum
+
+//        var x_2 = x
+//        var epsilon_2 = epsilon
+//        epsilon_2 *= 0.01
+//
+//        var newX: Double = epsilon_2
+//        var result = 0.0
+//
+//        if (x_2 <= 2) {
+//            x_2 -= 1
+//            result = x_2
+//            var iter = 2
+//            while (abs(newX) >= epsilon_2) {
+//                newX = x_2.pow(iter.toDouble()) / iter
+//                result = if (iter % 2 == 0) (newX.let { result -= it; result }) else (newX.let { result += it; result })
+//                iter += 1
+//            }
+//            return result
+//        } else {
+//            x_2 = (x_2 - 1) / (x_2 + 1)
+//            var iter = 1
+//            while (abs(newX) >= epsilon_2) {
+//                newX = x_2.pow(iter.toDouble()) / iter
+//                result += newX
+//                iter += 2
+//            }
+//            return result * 2
+//        }
     }
 }
