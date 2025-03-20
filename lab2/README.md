@@ -38,7 +38,7 @@ x > 0 : (((((log_5(x) + log_3(x)) + log_2(x)) - ln(x)) * ln(x)) / ((log_5(x) * l
 
 1. Sin()
 
-<img width="500" alt="/lab2/code/src/main/resources/images/trigonometric/sin.png" />
+<img width="500" alt="lab2/code/src/main/resources/images/trigonometric/sin.png" />
 
 2. Cos()
    
