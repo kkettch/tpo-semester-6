@@ -32,16 +32,11 @@ x > 0 : (((((log_5(x) + log_3(x)) + log_2(x)) - ln(x)) * ln(x)) / ((log_5(x) * l
 
 ## UML-диаграмма:
 
+<img width="588" alt="Снимок экрана 2025-03-20 в 21 25 34" src="https://github.com/user-attachments/assets/35c7c7f9-f22c-4b68-9357-72d97dde3458" />
 
 
-## Графики написанных функций: 
+## Графики главной функции: 
 
-1. Sin()
-
-<img width="500" alt="lab2/code/src/main/resources/images/trigonometric/sin.png" />
-
-2. Cos()
-   
-<img width="500" alt="Снимок экрана 2025-03-20 в 21 13 06" src="https://github.com/user-attachments/assets/ac507493-bd9c-49c8-b51a-6fa28fe48d53" />
+<img width="795" alt="Снимок экрана 2025-03-20 в 21 23 35" src="https://github.com/user-attachments/assets/986167da-3154-42c2-8a7f-23d9bcbd75cc" />
 
 
