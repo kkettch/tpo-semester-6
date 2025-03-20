@@ -11,13 +11,13 @@ import org.knowm.xchart.BitmapEncoder.saveBitmap
 
 fun main() {
     val csvPath = "src/main/resources/CsvFiles/output.csv"
-    val fileForPng = "src/main/resources/images/systemFunction.png"
+    val fileForPng = "src/main/resources/images/trigonometric/sec.png"
     val xStart = -10.0
     val xEnd = 10.0
     val step = 0.001
     val epsilon = 0.001
 
-    writeToCsv(csvPath, { x -> SystemFunction().calculate(x, epsilon) }, xStart, xEnd, step)
+    writeToCsv(csvPath, { x -> Sec(Cos(Sin())).calculate(x, epsilon) }, xStart, xEnd, step)
     drawFromCsv(csvPath, fileForPng)
 }
 
@@ -67,7 +67,7 @@ fun drawFromCsv(filePath: String, fileToWrite: String) {
     val chart = XYChartBuilder().width(800).height(600).title("Function Plot")
         .xAxisTitle("X").yAxisTitle("Y").build()
 
-    chart.addSeries("f(x)", xData, yData)
+    chart.addSeries("sec(x)", xData, yData)
 
 //    SwingWrapper(chart).displayChart()
     saveBitmap(chart, fileToWrite, BitmapEncoder.BitmapFormat.PNG)
