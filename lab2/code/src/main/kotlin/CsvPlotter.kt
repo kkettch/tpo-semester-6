@@ -17,7 +17,7 @@ class CsvPlotter(private val csvFilePath: String) {
                 if (parts.size == 2) {
                     val x = parts[0].toDoubleOrNull()
                     val y = parts[1].toDoubleOrNull()
-                    if (x != null && y != null && y > -50.0 && y < 50.0) {
+                    if (x != null && y != null && y > -5.0 && y < 5.0) {
                         xData.add(x)
                         yData.add(y)
                     }
@@ -30,8 +30,8 @@ class CsvPlotter(private val csvFilePath: String) {
 
         chart.addSeries("f(x)", xData, yData)
 
-//        SwingWrapper(chart).displayChart()
-        BitmapEncoder.saveBitmap(chart, outputImagePath, BitmapEncoder.BitmapFormat.PNG)
-        println("График сохранен: $outputImagePath")
+        SwingWrapper(chart).displayChart()
+//        BitmapEncoder.saveBitmap(chart, outputImagePath, BitmapEncoder.BitmapFormat.PNG)
+//        println("График сохранен: $outputImagePath")
     }
 }

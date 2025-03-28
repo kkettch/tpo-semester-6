@@ -16,7 +16,7 @@ class CsvWriter(private val filePath: String) {
             val result = try {
                 function(x)
             } catch (_: IllegalArgumentException) {
-                null
+                Double.NaN
             }
 
             if (result != null) {

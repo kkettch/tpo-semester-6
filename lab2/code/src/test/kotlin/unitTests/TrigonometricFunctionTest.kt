@@ -1,12 +1,18 @@
 package unitTests
 
+import integrationTest.FunctionIntegrationTest
+import integrationTest.FunctionIntegrationTest.Companion
 import org.example.trigonometric.*
 
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 import kotlin.math.PI
 import kotlin.math.abs
@@ -15,12 +21,42 @@ import kotlin.math.sin
 
 class TrigonometricFunctionTest {
 
+ companion object {
+  private val sinMockData: MutableMap<Double, Double> = mutableMapOf()
+  private val cosMockData: MutableMap<Double, Double> = mutableMapOf()
+  private val cotMockData: MutableMap<Double, Double> = mutableMapOf()
+  private val secMockData: MutableMap<Double, Double> = mutableMapOf()
+  private val cscMockData: MutableMap<Double, Double> = mutableMapOf()
+
+  @BeforeAll
+  @JvmStatic
+  fun loadMockData() {
+   loadMockDataFromFile("/CsvFiles/sinIn.csv", sinMockData)
+   loadMockDataFromFile("/CsvFiles/cosIn.csv", cosMockData)
+   loadMockDataFromFile("/CsvFiles/cotIn.csv", cotMockData)
+   loadMockDataFromFile("/CsvFiles/secIn.csv", secMockData)
+   loadMockDataFromFile("/CsvFiles/cscIn.csv", cscMockData)
+  }
+
+  private fun loadMockDataFromFile(fileName: String, dataMap: MutableMap<Double, Double>) {
+   val inputStream = this::class.java.getResourceAsStream(fileName)
+    ?: throw IllegalArgumentException("$fileName not found")
+
+   inputStream.bufferedReader().useLines { lines ->
+    lines.drop(1).forEach { line ->
+     val (x, value) = line.split(",").map { it.trim().toDouble() }
+     dataMap[x] = value
+    }
+   }
+  }
+ }
+
  @ParameterizedTest
  @DisplayName("Testing csc(x) with invalid input")
  @ValueSource(doubles = [-PI, 0.0, PI])
  fun `Should not calculate csc(x)`(x: Double) {
   assertThrows<IllegalArgumentException> {
-   Csc(Sin()).calculate(x, 0.001)
+   Csc().calculate(x, 0.001)
   }
  }
 
@@ -28,10 +64,17 @@ class TrigonometricFunctionTest {
  @DisplayName("Testing csc(x) with valid input")
  @ValueSource(doubles = [0.001, 0.2, PI/2, 2.9, PI - 0.001])
  fun `Should calculate csc(x)`(x: Double) {
-  val epsilon = 0.001
-  val expected = 1 / sin(x)
-  val actual = Csc(Sin()).calculate(x, epsilon)
-  assertTrue(abs(expected - actual) < epsilon, "Expected: $expected, actual: $actual")
+
+  val sinMock: Sin = mock()
+
+  whenever(sinMock.calculate(any(), any())).thenAnswer { invocation ->
+   val inputX = invocation.arguments[0] as Double
+   sinMockData[inputX] ?: throw IllegalArgumentException("No sin mock data for x = $inputX")
+  }
+
+  val expected = 1 / sinMock.calculate(x)
+  val actual = Csc(Sin()).calculate(x)
+  assertTrue(abs(expected - actual) < 0.000000001, "Expected: $expected, actual: $actual")
  }
 
  @ParameterizedTest
@@ -39,7 +82,7 @@ class TrigonometricFunctionTest {
  @ValueSource(doubles = [-PI/2, PI/2])
  fun `Should not calculate sec(x)`(x: Double) {
   assertThrows<IllegalArgumentException> {
-   Sec(Cos(Sin())).calculate(x, 0.001)
+   Sec().calculate(x, 0.001)
   }
  }
 
@@ -47,8 +90,16 @@ class TrigonometricFunctionTest {
  @DisplayName("Testing sec(x) with valid input")
  @ValueSource(doubles = [-3*PI/2 + 0.001, -4.7, PI, 1.7, PI/2 - 0.001])
  fun `Should calculate sec(x)`(x: Double) {
+
+  val cosMock: Cos = mock()
+
+  whenever(cosMock.calculate(any(), any())).thenAnswer { invocation ->
+   val inputX = invocation.arguments[0] as Double
+   cosMockData[inputX] ?: throw IllegalArgumentException("No cos mock data for x = $inputX")
+  }
+
   val epsilon = 0.001
-  val expected = 1 / cos(x)
+  val expected = 1 / cosMock.calculate(x)
   val actual = Sec(Cos(Sin())).calculate(x, epsilon)
   assertTrue(abs(expected - actual) < epsilon, "Expected: $expected, actual: $actual")
  }
@@ -66,10 +117,23 @@ class TrigonometricFunctionTest {
  @DisplayName("Testing cot(x) with valid input")
  @ValueSource(doubles = [0.001, 0.5, PI / 2, 2.5, PI - 0.001])
  fun `Should calculate cot(x)`(x: Double) {
-  val epsilon = 0.001
-  val expected = cos(x) / sin(x)
-  val actual = Cot(Sin(), Cos(Sin())).calculate(x, epsilon)
-  assertTrue(abs(expected - actual) < epsilon, "Expected: $expected, actual: $actual")
+
+  val sinMock: Sin = mock()
+  val cosMock: Cos = mock()
+
+  whenever(sinMock.calculate(any(), any())).thenAnswer { invocation ->
+   val inputX = invocation.arguments[0] as Double
+   sinMockData[inputX] ?: throw IllegalArgumentException("No sin mock data for x = $inputX")
+  }
+
+  whenever(cosMock.calculate(any(), any())).thenAnswer { invocation ->
+   val inputX = invocation.arguments[0] as Double
+   cosMockData[inputX] ?: throw IllegalArgumentException("No cos mock data for x = $inputX")
+  }
+
+  val expected = cosMock.calculate(x) / sinMock.calculate(x)
+  val actual = Cot().calculate(x)
+  assertTrue(abs(expected - actual) < 0.000000001, "Expected: $expected, actual: $actual")
  }
 
  @ParameterizedTest
@@ -77,7 +141,15 @@ class TrigonometricFunctionTest {
  @ValueSource(doubles = [0.0, 0.9, PI / 2, 2.3, PI])
  fun `Should calculate cos(x)`(x: Double) {
   val epsilon = 0.001
-  val expected = cos(x)
+
+  val cosMock: Cos = mock()
+
+  whenever(cosMock.calculate(any(), any())).thenAnswer { invocation ->
+   val inputX = invocation.arguments[0] as Double
+   cosMockData[inputX] ?: throw IllegalArgumentException("No cos mock data for x = $inputX")
+  }
+
+  val expected = cosMock.calculate(x)
   val actual = Cos(Sin()).calculate(x, epsilon)
   assertTrue(abs(expected - actual) < epsilon, "Expected: $expected, actual: $actual")
  }
@@ -87,7 +159,15 @@ class TrigonometricFunctionTest {
  @ValueSource(doubles = [-1.5 * PI, -PI / 2, -0.7, 0.0, 0.6, PI / 2])
  fun `Should calculate sin(x)`(x: Double) {
   val epsilon = 0.001
-  val expected = sin(x)
+
+  val sinMock: Sin = mock()
+
+  whenever(sinMock.calculate(any(), any())).thenAnswer { invocation ->
+   val inputX = invocation.arguments[0] as Double
+   sinMockData[inputX] ?: throw IllegalArgumentException("No sin mock data for x = $inputX")
+  }
+
+  val expected = sinMock.calculate(x)
   val actual = Sin().calculate(x, epsilon)
   assertTrue(abs(expected - actual) < epsilon, "Expected: $expected, actual: $actual")
  }

@@ -14,13 +14,13 @@ class Sin: TrigonometricFunction() {
         var sum = normX
         var term = normX
         var step = 0
-        var maxSteps = 10
+//        var maxSteps = 10
 
-        while (maxSteps > 0) {
+        while (abs(term) > epsilon) {
             term *= -normX * normX / ((2 * step + 2) * (2 * step + 3))
             sum += term
             step++
-            if (abs(term) < epsilon) { maxSteps-- }
+//            if (abs(term) < epsilon) { maxSteps-- }
         }
 
         return sum
