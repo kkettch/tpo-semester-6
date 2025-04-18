@@ -39,11 +39,12 @@ class SearchTest {
         drivers.forEach { driver ->
             val mainPage = MainPage(driver)
             val resultsPage = SearchResultsPage(driver)
+            val stringToLookFor = "пылесос"
 
             mainPage.open()
-            mainPage.searchFor("пылесос")
+            mainPage.searchFor(stringToLookFor)
 
-            assertTrue(resultsPage.hasResults())
+            assertTrue(resultsPage.hasResults(stringToLookFor))
             driver.quit()
         }
     }
