@@ -7,24 +7,31 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
 
-class MainPage(private val driver: WebDriver) {
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(10))
+class MainPage(driver: WebDriver) : Page(driver) {
+
     private val searchContainer = By.xpath("//*[@id=\"app\"]/div[3]/div/header/div[2]/div/div/div/div[2]/div[2]")
     private val searchInput = By.xpath("//*[@id=\"app\"]/div[3]/div/div[2]/div/div/form/div[1]/div/label/textarea")
     private val searchButton = By.xpath("//*[@id=\"app\"]/div[3]/div/div[2]/div/div/form/div[1]/div[2]/div[2]/button")
 
-    fun open() {
+    fun open(): MainPage {
         driver.get("https://megamarket.ru")
+        return this
     }
 
-    fun searchFor(keyword: String) {
-        // Шаг 1: Кликаем на контейнер поиска
-        wait.until(ExpectedConditions.elementToBeClickable(searchContainer)).click()
+    fun searchFor(keyword: String): SearchResultsPage {
+        click(searchContainer)  // Используем утилиту для клика
+        type(searchInput, keyword)  // Используем утилиту для ввода текста
+        click(searchButton)  // Используем утилиту для клика
 
-        // Шаг 2: Ждём появления input и вводим текст
-        wait.until(ExpectedConditions.visibilityOfElementLocated(searchInput)).sendKeys(keyword)
+//        // Шаг 1: Кликаем на контейнер поиска
+//        wait.until(ExpectedConditions.elementToBeClickable(searchContainer)).click()
+//
+//        // Шаг 2: Ждём появления input и вводим текст
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(searchInput)).sendKeys(keyword)
+//
+//        // Шаг 3: Нажимаем кнопку "Поиск"
+//        wait.until(ExpectedConditions.elementToBeClickable(searchButton)).click()
+        return SearchResultsPage(driver)
 
-        // Шаг 3: Нажимаем кнопку "Поиск"
-        wait.until(ExpectedConditions.elementToBeClickable(searchButton)).click()
     }
 }

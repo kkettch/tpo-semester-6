@@ -14,19 +14,14 @@ import kotlin.test.assertTrue
 class SearchTest {
 
     private val drivers: MutableList<WebDriver> = mutableListOf()
-    private val browsers: List<String> = listOf("chrome", "firefox")
 
     @BeforeEach
     fun setup() {
-        browsers.forEach { browser ->
-            val driver = when (browser.lowercase()) {
-                "chrome" -> ChromeDriver()
-                "firefox" -> FirefoxDriver()
-                else -> throw IllegalArgumentException("Browser $browser not supported")
-            }
-            driver.manage().window().maximize()
-            drivers.add(driver)
-        }
+        val chromeDriver = ChromeDriver().apply { manage().window().maximize() }
+        val firefoxDriver = FirefoxDriver().apply { manage().window().maximize() }
+
+        drivers.add(chromeDriver)
+        drivers.add(firefoxDriver)
     }
 
     @AfterEach
@@ -36,16 +31,14 @@ class SearchTest {
 
     @Test
     fun testProductSearchShowsResults() {
+        val keyword = "пылесос"
         drivers.forEach { driver ->
-            val mainPage = MainPage(driver)
-            val resultsPage = SearchResultsPage(driver)
-            val stringToLookFor = "пылесос"
+            val hasResults = MainPage(driver)
+                .open()
+                .searchFor(keyword)
+                .hasRelatedSearch(keyword)
 
-            mainPage.open()
-            mainPage.searchFor(stringToLookFor)
-
-            assertTrue(resultsPage.hasResults(stringToLookFor))
-            driver.quit()
+            assertTrue(hasResults, "Search results do not contain expected query: $keyword")
         }
     }
 }

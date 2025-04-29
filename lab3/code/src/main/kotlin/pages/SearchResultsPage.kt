@@ -2,13 +2,13 @@ package org.example.pages
 
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
 
-class SearchResultsPage(private val driver: WebDriver) {
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(10))
+class SearchResultsPage(driver: WebDriver) : Page(driver) {
 
-    fun hasResults(searchedString: String): Boolean {
+    fun hasRelatedSearch(searchedString: String): Boolean {
         return try {
             val linkElement = wait.until {
                 driver.findElement(
