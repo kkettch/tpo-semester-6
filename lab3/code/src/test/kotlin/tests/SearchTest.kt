@@ -160,4 +160,36 @@ class SearchTest {
             driver.quit()
         }
     }
+
+    // Use-Case #9 - reviews sorted in ascending order
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testReviewsInAscendingOrder(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val isSortedByAscendingOrder = CardPage(driver)
+                .openCardPage()
+                .isSortedHighestRatedFirst()
+
+            assertTrue(isSortedByAscendingOrder, "Reviews are not sorted by ascending order")
+        } finally {
+            driver.quit()
+        }
+    }
+
+    // Use-Case #10 - reviews sorted in descending order
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testReviewsInDescendingOrder(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val isSortedByDescendingOrder = CardPage(driver)
+                .openCardPage()
+                .isSortedLowestRatedFirst()
+
+            assertTrue(isSortedByDescendingOrder, "Reviews are not sorted by descending order")
+        } finally {
+            driver.quit()
+        }
+    }
 }
