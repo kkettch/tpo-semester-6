@@ -52,4 +52,36 @@ class SearchTest {
             driver.quit()
         }
     }
+
+    // Use-Case #3 - checking that sorting by price (cheaper first) is correct
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testPriceFilterCheapFirst(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val searchResultsCheapFirst = SearchResultsPage(driver)
+                .openVacuumCleanerSearchPage()
+                .isFilteredByPriceCheapFirst()
+
+            assertTrue(searchResultsCheapFirst, "Objects are not sorted by cheaper first rule")
+        } finally {
+            driver.quit()
+        }
+    }
+
+    // Use-Case #4 - checking that sorting by price (expensive first) is correct
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testPriceFilterExpensiveFirst(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val searchResultsExpensiveFirst = SearchResultsPage(driver)
+                .openVacuumCleanerSearchPage()
+                .isFilteredByPriceExpensiveFirst()
+
+            assertTrue(searchResultsExpensiveFirst, "Objects are not sorted by expensive first rule")
+        } finally {
+            driver.quit()
+        }
+    }
 }
