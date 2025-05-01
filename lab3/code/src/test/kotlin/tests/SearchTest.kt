@@ -1,6 +1,8 @@
 package tests
 
 
+import com.sun.tools.javac.Main
+import org.example.pages.CardPage
 import org.example.pages.CategoryFoundPage
 import org.example.pages.MainPage
 import org.example.pages.SearchResultsPage
@@ -135,6 +137,25 @@ class SearchTest {
 
             assertEquals(nameOfCategory, nameOfCategoryPage, "Category name not found")
 
+        } finally {
+            driver.quit()
+        }
+    }
+
+    // Use-Case #8 - product card check
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testProductCard(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val nameOfCardOnMainPage = MainPage(driver)
+                .openMainPage()
+                .getNameOfCard()
+
+            val nameOfCardOnCardPage = CardPage(driver)
+                .getNameOfProductOnCardPage()
+
+            assertEquals(nameOfCardOnMainPage, nameOfCardOnCardPage, "Card name not found")
         } finally {
             driver.quit()
         }

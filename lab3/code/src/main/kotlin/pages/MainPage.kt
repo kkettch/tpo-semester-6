@@ -14,7 +14,6 @@ class MainPage(driver: WebDriver) : Page(driver) {
     private val productCardOnMainPage = By.xpath("//article[contains(@class, 'product-card product-card_s')][1]")
     private val productCardOnFavouritePage = By.xpath("//div[contains(@class, 'catalog-item-regular-desktop personal-listing-items__item ddl_product catalog-item-desktop')][1]")
     private val listOfCategories = By.xpath("//div[@class='header-catalog-menu-item header-catalog-menu-block__item']")
-    private val listOfSubCategories = By.xpath(".//div[@class='header-catalog-menu-block catalog-menu-redesign__child-block header-catalog-menu-block_child']")
 
     fun openMainPage(): MainPage {
         driver.get("https://megamarket.ru")
@@ -55,5 +54,15 @@ class MainPage(driver: WebDriver) : Page(driver) {
         categories?.getOrNull(1)?.click()
 
         return titleText ?: ""
+    }
+
+    fun getNameOfCard(): String {
+        hoverOverElement(productCardOnMainPage)
+        val nameOnMainPage = waitForElement(productCardOnMainPage)
+            .findElement(By.xpath(".//a[contains(@class, 'product-card__title product-card__title_show')]"))
+            .text
+
+        click(productCardOnMainPage)
+        return nameOnMainPage
     }
 }
