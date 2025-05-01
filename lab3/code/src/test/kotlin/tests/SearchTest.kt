@@ -59,11 +59,11 @@ class SearchTest {
     fun testPriceFilterCheapFirst(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val searchResultsCheapFirst = SearchResultsPage(driver)
+            val isResultSortedCorrectly = SearchResultsPage(driver)
                 .openVacuumCleanerSearchPage()
                 .isFilteredByPriceCheapFirst()
 
-            assertTrue(searchResultsCheapFirst, "Objects are not sorted by cheaper first rule")
+            assertTrue(isResultSortedCorrectly, "Objects are not sorted by cheaper first rule")
         } finally {
             driver.quit()
         }
@@ -75,11 +75,11 @@ class SearchTest {
     fun testPriceFilterExpensiveFirst(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val searchResultsExpensiveFirst = SearchResultsPage(driver)
+            val isResultSortedCorrectly = SearchResultsPage(driver)
                 .openVacuumCleanerSearchPage()
                 .isFilteredByPriceExpensiveFirst()
 
-            assertTrue(searchResultsExpensiveFirst, "Objects are not sorted by expensive first rule")
+            assertTrue(isResultSortedCorrectly, "Objects are not sorted by expensive first rule")
         } finally {
             driver.quit()
         }
@@ -91,11 +91,28 @@ class SearchTest {
     fun testAddingProductToFavourites(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val areProductsTheSame = MainPage(driver)
+            val isProductAdded = MainPage(driver)
                 .openMainPage()
                 .isAddingToFavouriteCorrect()
 
-            assertTrue(areProductsTheSame, "Products are not the same after adding to favourites")
+            assertTrue(isProductAdded, "Products are not correct after adding to favourites")
+        } finally {
+            driver.quit()
+        }
+    }
+
+    // Use-Case #6 - adding product to cart
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testAddingProductToCart(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val isProductAdded = SearchResultsPage(driver)
+                .openVacuumCleanerSearchPage()
+                .isAddingToCartCorrect()
+
+            assertTrue(isProductAdded, "Products are not correct after adding to cart")
+
         } finally {
             driver.quit()
         }

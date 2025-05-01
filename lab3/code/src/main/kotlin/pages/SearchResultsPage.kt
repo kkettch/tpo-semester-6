@@ -1,18 +1,20 @@
 package org.example.pages
 
 import org.openqa.selenium.By
+import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebDriver
 
 class SearchResultsPage(driver: WebDriver) : Page(driver) {
 
-    private val addToComparisonButton1 = By.xpath("/html/body/div[2]/div[1]/div[3]/div/main/div/div[1]/div[3]/div/div[2]/div/div[2]/div[2]/div[2]/div/div/div[1]/div[1]/div[2]/div[2]")
-    private val addToComparisonButton2 = By.xpath("/html/body/div[2]/div[1]/div[3]/div/main/div/div[1]/div[3]/div/div[2]/div/div[2]/div[2]/div[2]/div/div/div[1]/div[2]/div[2]/div[2]")
-    private val openFilterChoice = By.xpath("/html/body/div[2]/div[1]/div[3]/div/main/div/div[1]/div[3]/div/div[2]/div/div[2]/div[2]/div[1]/div/div[1]/div")
-    private val cheapFirstButton = By.xpath("/html/body/div[2]/div[1]/div[3]/div/main/div/div[1]/div[3]/div/div[2]/div/div[2]/div[2]/div[1]/div/div[1]/div/div[2]/ul/li[2]")
-    private val expensiveFirstButton = By.xpath("/html/body/div[2]/div[1]/div[3]/div/main/div/div[1]/div[3]/div/div[2]/div/div[2]/div[2]/div[1]/div/div[1]/div/div[2]/ul/li[3]")
-    private val firstPrice = By.xpath("/html/body/div[2]/div[1]/div[3]/div/main/div/div[1]/div[3]/div/div[2]/div/div[2]/div[2]/div[2]/div/div/div[1]/div[1]/div[4]/div[1]/div")
-    private val secondPrice = By.xpath("/html/body/div[2]/div[1]/div[3]/div/main/div/div[1]/div[3]/div/div[2]/div/div[2]/div[2]/div[2]/div/div/div[1]/div[2]/div[4]/div/div")
-    private val thirdPrice = By.xpath("/html/body/div[2]/div[1]/div[3]/div/main/div/div[1]/div[3]/div/div[2]/div/div[2]/div[2]/div[2]/div/div/div[1]/div[3]/div[4]/div/div")
+    private val addToComparisonButtons = By.xpath("//div[contains(@class, 'catalog-item-buttons__button catalog-item-buttons__button-compare')]")
+    private val openFilterChoice = By.xpath("//div[contains(@class, 'select field sm')]")
+    private val cheapFirstButton = By.xpath("//li[contains(@class, 'option') and contains(text(), 'Сначала дешевле')]")
+    private val expensiveFirstButton = By.xpath("//li[contains(@class, 'option') and contains(text(), 'Сначала дороже')]")
+    private val prices = By.xpath("//div[contains(@class, 'catalog-item-regular-desktop__price') and contains(@data-test, 'product-price')]")
+    private val productTitleOnSearchPage = By.xpath("//a[contains(@class, 'catalog-item-regular-desktop__title-link ddl_product_link')]")
+    private val addToCartButton = By.xpath("//button[contains(@class, 'catalog-buy-button__button btn sm')][1]")
+    private val openCartButton = By.xpath("//div[contains(@class, 'multicart-tab navigation-tabs__multicart-button')]")
+    private val productTitleOnCartPage = By.xpath("//span[contains(@class, 'title')]")
 
     fun openVacuumCleanerSearchPage(): SearchResultsPage {
         driver.get("https://megamarket.ru/catalog/pylesosy/#?related_search=пылесос")
@@ -37,8 +39,13 @@ class SearchResultsPage(driver: WebDriver) : Page(driver) {
     }
 
     fun addTwoItemsToCompareFromSearchForVacuumCleaner(): ComparePage {
-        click(addToComparisonButton1)
-        click(addToComparisonButton2)
+        val buttons = waitForElements(addToComparisonButtons)
+
+        buttons?.take(2)
+            ?.forEach {
+            it!!.click()
+        }
+
         return ComparePage(driver)
     }
 
@@ -76,32 +83,46 @@ class SearchResultsPage(driver: WebDriver) : Page(driver) {
 
     private fun waitForPricesToChange(initialPrices: List<Int>) {
         wait.until {
-            val currentPrices = getCurrentPrices()
-            currentPrices != initialPrices &&
-                    currentPrices.all { it > 0 }
+            try {
+                val currentPrices = getCurrentPrices()
+                currentPrices != initialPrices && currentPrices.size >= 4 && currentPrices.all { it > 0 }
+            } catch (e: StaleElementReferenceException) {
+                false
+            }
         }
     }
 
     private fun getCurrentPrices(): List<Int> {
-        return listOf(
-            getPriceValue(firstPrice),
-            getPriceValue(secondPrice),
-            getPriceValue(thirdPrice)
-        )
-    }
-
-    fun getPriceValue(priceElementLocator: By): Int {
-        val priceElement = waitForElement(priceElementLocator)
-        val priceText = priceElement.text
-
-        return parsePriceText(priceText)
+        return waitForElements(prices)!!
+            .take(4)
+            .mapNotNull { element ->
+                try {
+                    parsePriceText(element!!.text)
+                } catch (e: Exception) {
+                    null
+                }
+            }
     }
 
     private fun parsePriceText(priceText: String): Int {
         val cleanPrice = priceText.replace("[^0-9]".toRegex(), "")
-
         return cleanPrice.toIntOrNull() ?: throw IllegalArgumentException(
             "Не удалось извлечь цену из текста: '$priceText'"
         )
+    }
+
+    fun isAddingToCartCorrect(): Boolean {
+        val nameOnMainPage = waitForElement(productTitleOnSearchPage)
+            .findElement(productTitleOnSearchPage)
+            .text
+
+        click(addToCartButton)
+        click(openCartButton)
+
+        val nameOnCartPage = waitForElement(productTitleOnCartPage)
+            .findElement(productTitleOnCartPage)
+            .text
+
+        return nameOnMainPage == nameOnCartPage
     }
 }
