@@ -8,14 +8,8 @@ import org.example.pages.MainPage
 import org.example.pages.SearchResultsPage
 import org.example.utils.Browser
 import org.example.utils.WebDriverFactory
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.firefox.FirefoxDriver;
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
