@@ -1,6 +1,7 @@
 package tests
 
 
+import org.example.pages.CategoryFoundPage
 import org.example.pages.MainPage
 import org.example.pages.SearchResultsPage
 import org.example.utils.Browser
@@ -13,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver;
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SearchTest {
@@ -118,5 +120,23 @@ class SearchTest {
         }
     }
 
+    // Use-Case #7 - select category
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testSelectingCategory(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val nameOfCategory = MainPage(driver)
+                .openMainPage()
+                .getNameOfCategory()
 
+            val nameOfCategoryPage = CategoryFoundPage(driver)
+                .getNameOfCategoryPage()
+
+            assertEquals(nameOfCategory, nameOfCategoryPage, "Category name not found")
+
+        } finally {
+            driver.quit()
+        }
+    }
 }

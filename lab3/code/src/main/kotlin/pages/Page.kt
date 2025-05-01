@@ -37,4 +37,8 @@ abstract class Page(protected val driver: WebDriver) {
         Actions(driver).moveToElement(element).perform()
     }
 
+    fun hoverOverWebElement(element: WebElement) {
+        Actions(driver).moveToElement(element).perform()
+    }
+
 }

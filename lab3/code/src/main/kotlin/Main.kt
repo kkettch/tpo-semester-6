@@ -1,5 +1,6 @@
 package org.example
 
+import org.example.pages.CategoryFoundPage
 import org.example.pages.MainPage
 import org.example.pages.SearchResultsPage
 import org.example.utils.Browser
@@ -9,8 +10,8 @@ import org.example.utils.WebDriverFactory
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
     val driver = WebDriverFactory.createDriver(Browser.CHROME)
-    print(SearchResultsPage(driver)
-        .openVacuumCleanerSearchPage()
-        .isFilteredByPriceCheapFirst())
+    print(CategoryFoundPage(driver)
+        .openCategoryPage()
+        .getNameOfCategoryPage())
 
 }
