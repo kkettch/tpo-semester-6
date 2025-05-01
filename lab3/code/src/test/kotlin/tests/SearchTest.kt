@@ -84,4 +84,22 @@ class SearchTest {
             driver.quit()
         }
     }
+
+    // Use-Case #5 - adding product to favourites
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testAddingProductToFavourites(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val areProductsTheSame = MainPage(driver)
+                .openMainPage()
+                .isAddingToFavouriteCorrect()
+
+            assertTrue(areProductsTheSame, "Products are not the same after adding to favourites")
+        } finally {
+            driver.quit()
+        }
+    }
+
+
 }
