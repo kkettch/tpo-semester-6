@@ -20,6 +20,12 @@ class MainPage(driver: WebDriver) : Page(driver) {
         return this
     }
 
+    fun isPageLoaded(): Boolean {
+        return isElementDisplayed(categoryContainer)
+                && (isElementDisplayed(favouriteContainer)
+                && isElementDisplayed(searchContainer))
+    }
+
     fun searchFor(keyword: String): SearchResultsPage {
         click(searchContainer)
         type(searchInput, keyword)

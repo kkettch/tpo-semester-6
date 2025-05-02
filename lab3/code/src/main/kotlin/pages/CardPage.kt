@@ -17,6 +17,11 @@ class CardPage(driver: WebDriver) : Page(driver) {
         return this
     }
 
+    fun isPageLoaded(): Boolean {
+        return isElementDisplayed(titleOfProduct)
+                && (isElementDisplayed(openRatingButton))
+    }
+
     fun getNameOfProductOnCardPage(): String {
         val titleElement = waitForElement(titleOfProduct)
             .findElement(titleOfProduct)

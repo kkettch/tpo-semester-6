@@ -15,11 +15,24 @@ class SearchResultsPage(driver: WebDriver) : Page(driver) {
     private val addToCartButton = By.xpath("//button[contains(@class, 'catalog-buy-button__button btn sm')][1]")
     private val openCartButton = By.xpath("//div[contains(@class, 'multicart-tab navigation-tabs__multicart-button')]")
     private val productTitleOnCartPage = By.xpath("//span[contains(@class, 'title')]")
+    private val goToComparePageButton = By.xpath("//div[contains(@class, 'btn') and contains(text(), 'Сравнить')]")
+    private val secondCard = By.xpath("//div[@class='catalog-item-regular-desktop ddl_product catalog-item-desktop'][2]")
 
     fun openVacuumCleanerSearchPage(): SearchResultsPage {
         driver.get("https://megamarket.ru/catalog/pylesosy/#?related_search=пылесос")
         return this
     }
+
+    fun isPageLoaded(): Boolean {
+        return isElementDisplayed(addToCartButton)
+                && isElementDisplayed(addToComparisonButtons)
+    }
+
+    fun clickSecondCard(): CardPage {
+        click(secondCard)
+        return CardPage(driver)
+    }
+
 
     fun hasRelatedSearch(searchedString: String): Boolean {
         return try {
@@ -44,6 +57,17 @@ class SearchResultsPage(driver: WebDriver) : Page(driver) {
         buttons?.take(2)
             ?.forEach {
             it!!.click()
+        }
+        click(goToComparePageButton)
+
+        val originalWindow = driver.windowHandle
+        val allWindows = driver.windowHandles
+
+        for (window in allWindows) {
+            if (window != originalWindow) {
+                driver.switchTo().window(window)
+                break
+            }
         }
 
         return ComparePage(driver)

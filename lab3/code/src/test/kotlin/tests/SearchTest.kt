@@ -1,11 +1,8 @@
 package tests
 
-
-import com.sun.tools.javac.Main
 import org.example.pages.CardPage
 import org.example.pages.CategoryFoundPage
 import org.example.pages.MainPage
-import org.example.pages.SearchResultsPage
 import org.example.utils.Browser
 import org.example.utils.WebDriverFactory
 import org.junit.jupiter.params.ParameterizedTest
@@ -15,6 +12,20 @@ import kotlin.test.assertTrue
 
 class SearchTest {
 
+    // check if MainPage is Loaded
+    @ParameterizedTest
+    @EnumSource(Browser::class)
+    fun testHomePageOpened(browser: Browser) {
+        val driver = WebDriverFactory.createDriver(browser)
+        try {
+            val hasResults = MainPage(driver)
+                .openMainPage()
+            assertTrue(hasResults.isPageLoaded(), "MainPage should be loaded")
+        } finally {
+            driver.quit()
+        }
+    }
+
     // Use-Case #1 - Search For Product
     @ParameterizedTest
     @EnumSource(Browser::class)
@@ -22,12 +33,18 @@ class SearchTest {
         val driver = WebDriverFactory.createDriver(browser)
         try {
             val keyword = "пылесос"
+
             val hasResults = MainPage(driver)
                 .openMainPage()
-                .searchFor(keyword)
-                .hasRelatedSearch(keyword)
+            assertTrue(hasResults.isPageLoaded(), "MainPage should be loaded")
 
-            assertTrue(hasResults, "Search results do not contain expected query: $keyword")
+            val searchResultsPage = hasResults
+                .searchFor(keyword)
+            assertTrue(searchResultsPage.isPageLoaded(), "searchResultsPage should be loaded")
+
+            val result = searchResultsPage
+                .hasRelatedSearch(keyword)
+            assertTrue(result, "Search results do not contain expected query: $keyword")
         } finally {
             driver.quit()
         }
@@ -36,16 +53,26 @@ class SearchTest {
     // Use-Case #2 - check that both products are added for comparison
     @ParameterizedTest
     @EnumSource(Browser::class)
-    fun testAddingToComparison(browser: Browser) {
+    fun testAddToComparison(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val hasBothObjects = SearchResultsPage(driver)
-                .openVacuumCleanerSearchPage()
-                .addTwoItemsToCompareFromSearchForVacuumCleaner()
-                .openComparePage()
-                .isVacuumCleanersOnPage()
+            val keyword = "пылесос"
 
-            assertTrue(hasBothObjects, "Search results are not on the page")
+            val mainPageResult = MainPage(driver)
+                .openMainPage()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
+
+            val vacuumCleanerSearchPage = mainPageResult
+                .searchFor(keyword)
+            assertTrue(vacuumCleanerSearchPage.isPageLoaded(), "Vacuum Cleaner search should be loaded")
+
+            val comparePage = vacuumCleanerSearchPage
+                .addTwoItemsToCompareFromSearchForVacuumCleaner()
+            assertTrue(comparePage.isPageLoaded(), "Compare page should be loaded")
+
+            val result = comparePage
+                .isVacuumCleanersOnPage()
+            assertTrue(result, "Search results are not on the page")
         } finally {
             driver.quit()
         }
@@ -57,11 +84,18 @@ class SearchTest {
     fun testPriceFilterCheapFirst(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val isResultSortedCorrectly = SearchResultsPage(driver)
-                .openVacuumCleanerSearchPage()
-                .isFilteredByPriceCheapFirst()
+            val keyword = "пылесос"
 
-            assertTrue(isResultSortedCorrectly, "Objects are not sorted by cheaper first rule")
+            val mainPageResult = MainPage(driver)
+                .openMainPage()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
+
+            val vacuumCleanerSearchPage = mainPageResult.searchFor(keyword)
+            assertTrue(vacuumCleanerSearchPage.isPageLoaded(), "Vacuum Cleaner search should be loaded")
+
+            val result = vacuumCleanerSearchPage
+                .isFilteredByPriceCheapFirst()
+            assertTrue(result, "Objects are not sorted by cheaper first rule")
         } finally {
             driver.quit()
         }
@@ -73,11 +107,18 @@ class SearchTest {
     fun testPriceFilterExpensiveFirst(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val isResultSortedCorrectly = SearchResultsPage(driver)
-                .openVacuumCleanerSearchPage()
-                .isFilteredByPriceExpensiveFirst()
+            val keyword = "пылесос"
 
-            assertTrue(isResultSortedCorrectly, "Objects are not sorted by expensive first rule")
+            val mainPageResult = MainPage(driver)
+                .openMainPage()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
+
+            val vacuumCleanerSearchPage = mainPageResult.searchFor(keyword)
+            assertTrue(vacuumCleanerSearchPage.isPageLoaded(), "Vacuum Cleaner search should be loaded")
+
+            val result = vacuumCleanerSearchPage
+                .isFilteredByPriceExpensiveFirst()
+            assertTrue(result, "Objects are not sorted by expensive first rule")
         } finally {
             driver.quit()
         }
@@ -89,11 +130,13 @@ class SearchTest {
     fun testAddingProductToFavourites(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val isProductAdded = MainPage(driver)
+            val mainPageResult = MainPage(driver)
                 .openMainPage()
-                .isAddingToFavouriteCorrect()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
 
-            assertTrue(isProductAdded, "Products are not correct after adding to favourites")
+            val result = mainPageResult
+                .isAddingToFavouriteCorrect()
+            assertTrue(result, "Products are not correct after adding to favourites")
         } finally {
             driver.quit()
         }
@@ -105,11 +148,18 @@ class SearchTest {
     fun testAddingProductToCart(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val isProductAdded = SearchResultsPage(driver)
-                .openVacuumCleanerSearchPage()
-                .isAddingToCartCorrect()
+            val keyword = "пылесос"
 
-            assertTrue(isProductAdded, "Products are not correct after adding to cart")
+            val mainPageResult = MainPage(driver)
+                .openMainPage()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
+
+            val vacuumCleanerSearchPage = mainPageResult.searchFor(keyword)
+            assertTrue(vacuumCleanerSearchPage.isPageLoaded(), "Vacuum Cleaner search should be loaded")
+
+            val result = vacuumCleanerSearchPage
+                .isAddingToCartCorrect()
+            assertTrue(result, "Products are not correct after adding to cart")
 
         } finally {
             driver.quit()
@@ -122,15 +172,16 @@ class SearchTest {
     fun testSelectingCategory(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val nameOfCategory = MainPage(driver)
+            val mainPageResult = MainPage(driver)
                 .openMainPage()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
+
+            val nameOfCategory = mainPageResult
                 .getNameOfCategory()
 
             val nameOfCategoryPage = CategoryFoundPage(driver)
                 .getNameOfCategoryPage()
-
             assertEquals(nameOfCategory, nameOfCategoryPage, "Category name not found")
-
         } finally {
             driver.quit()
         }
@@ -142,13 +193,15 @@ class SearchTest {
     fun testProductCard(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val nameOfCardOnMainPage = MainPage(driver)
+            val mainPageResult = MainPage(driver)
                 .openMainPage()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
+
+            val nameOfCardOnMainPage = mainPageResult
                 .getNameOfCard()
 
             val nameOfCardOnCardPage = CardPage(driver)
                 .getNameOfProductOnCardPage()
-
             assertEquals(nameOfCardOnMainPage, nameOfCardOnCardPage, "Card name not found")
         } finally {
             driver.quit()
@@ -161,10 +214,21 @@ class SearchTest {
     fun testReviewsInAscendingOrder(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val isSortedByAscendingOrder = CardPage(driver)
-                .openCardPage()
-                .isSortedHighestRatedFirst()
+            val keyword = "защитная пленка samsung для galaxy a34 (ef-ua346ctegru) (2шт)"
+            val mainPageResult = MainPage(driver)
+                .openMainPage()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
 
+            val searchResultsPage = mainPageResult
+                .searchFor(keyword)
+            assertTrue(searchResultsPage.isPageLoaded(), "searchResultsPage should be loaded")
+
+            val cardPage = searchResultsPage
+                .clickSecondCard()
+            assertTrue(cardPage.isPageLoaded(), "cardPage should be loaded")
+
+            val isSortedByAscendingOrder = cardPage
+                .isSortedHighestRatedFirst()
             assertTrue(isSortedByAscendingOrder, "Reviews are not sorted by ascending order")
         } finally {
             driver.quit()
@@ -177,10 +241,21 @@ class SearchTest {
     fun testReviewsInDescendingOrder(browser: Browser) {
         val driver = WebDriverFactory.createDriver(browser)
         try {
-            val isSortedByDescendingOrder = CardPage(driver)
-                .openCardPage()
-                .isSortedLowestRatedFirst()
+            val keyword = "защитная пленка samsung для galaxy a34 (ef-ua346ctegru) (2шт)"
+            val mainPageResult = MainPage(driver)
+                .openMainPage()
+            assertTrue(mainPageResult.isPageLoaded(), "MainPage should be loaded")
 
+            val searchResultsPage = mainPageResult
+                .searchFor(keyword)
+            assertTrue(searchResultsPage.isPageLoaded(), "searchResultsPage should be loaded")
+
+            val cardPage = searchResultsPage
+                .clickSecondCard()
+            assertTrue(cardPage.isPageLoaded(), "cardPage should be loaded")
+
+            val isSortedByDescendingOrder = CardPage(driver)
+                .isSortedLowestRatedFirst()
             assertTrue(isSortedByDescendingOrder, "Reviews are not sorted by descending order")
         } finally {
             driver.quit()

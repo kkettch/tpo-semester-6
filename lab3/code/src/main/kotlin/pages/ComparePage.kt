@@ -6,10 +6,15 @@ import org.openqa.selenium.WebDriver
 class ComparePage(driver: WebDriver) : Page(driver) {
 
     private val productTitles = By.xpath("//div[@class='ddl_product_link']")
+    private val pageTitle = By.xpath("//div[@class='comparing-screen-desktop__title']")
 
     fun openComparePage(): ComparePage {
         driver.get("https://megamarket.ru/compare/")
         return this
+    }
+
+    fun isPageLoaded(): Boolean {
+        return isElementDisplayed(pageTitle)
     }
 
     fun isVacuumCleanersOnPage(maxAttempts: Int = 2): Boolean {

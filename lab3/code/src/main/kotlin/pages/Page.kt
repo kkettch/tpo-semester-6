@@ -41,4 +41,13 @@ abstract class Page(protected val driver: WebDriver) {
         Actions(driver).moveToElement(element).perform()
     }
 
+    fun isElementDisplayed(locator: By): Boolean {
+        return try {
+            wait.until {
+                driver.findElement(locator).isDisplayed
+            }
+        } catch (e: NoSuchElementException) {
+            false
+        }
+    }
 }

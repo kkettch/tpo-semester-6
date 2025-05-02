@@ -12,6 +12,10 @@ class CategoryFoundPage(driver: WebDriver) : Page(driver) {
         return this
     }
 
+    fun isPageLoaded(): Boolean {
+        return isElementDisplayed(titleOfPage)
+    }
+
     fun getNameOfCategoryPage(): String {
         val titleElement = waitForElement(titleOfPage)
             .findElement(titleOfPage)
